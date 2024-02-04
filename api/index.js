@@ -20,3 +20,12 @@ app.use(express.json());
 
 app.use('/api/user',userRoutes);
 app.use('/api/auth',authRoutes)
+app.use((err,req,res,next)=>{ //middleware function to handle errors
+    const statusCode=err.statusCode || 500;
+    const message=err.message || 'internal server error'
+    res.status(statusCode).json({
+        success:false,
+        statusCode,
+        message
+    });
+})
