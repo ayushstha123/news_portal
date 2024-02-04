@@ -1,4 +1,4 @@
-import { Button, Navbar, NavbarToggle, TextInput } from 'flowbite-react'
+import { Navbar, TextInput } from 'flowbite-react'
 import React from 'react'
 import { Link,useLocation } from 'react-router-dom'
 
@@ -25,7 +25,7 @@ const Header = () => {
         <Navbar.Collapse>
             <Navbar.Link active={path==='/'}><Link to='/'>Home</Link></Navbar.Link>
             <Navbar.Link active={path==='/about'}><Link to='/about'>About</Link></Navbar.Link>
-            <Navbar.Link active={path==='/sigin'}><Link to='/signin'>SignIn</Link></Navbar.Link>
+            <Navbar.Link active={path==='/sigin'}><Link to='/signup'>Sign Up</Link></Navbar.Link>
             </Navbar.Collapse> 
         </Navbar>
     </div>
