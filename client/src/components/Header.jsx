@@ -12,7 +12,7 @@ const Header = () => {
                 News_Portal
             </Link>
         </div>
-       
+
         <form>
             <TextInput
             type='text'
@@ -22,15 +22,12 @@ const Header = () => {
         </form> 
 
         <Navbar.Toggle/>
-        
         <Navbar.Collapse>
             <Navbar.Link active={path==='/'}><Link to='/'>Home</Link></Navbar.Link>
             <Navbar.Link active={path==='/about'}><Link to='/about'>About</Link></Navbar.Link>
             <Navbar.Link active={path==='/sigin'}><Link to='/signin'>SignIn</Link></Navbar.Link>
             </Navbar.Collapse> 
-                  
         </Navbar>
-        
     </div>
   )
 }
