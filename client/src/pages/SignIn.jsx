@@ -82,12 +82,12 @@ const SignIn = () => {
               </Link>
             </div>
             {
-              errorMessage && (
-                <Alert className='mt-6' color='failure'>
-                {errorMessage}
-                </Alert>
-              )
-            }
+  errorMessage && (
+    <Alert className='mt-6' color='failure'>
+      {errorMessage.message || errorMessage}
+    </Alert>
+  )
+}
           </div>
         </div>
       </div>

@@ -15,6 +15,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
+    profilePic:{
+        type:String,
+        default:"https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png",
+    }
 },{timestamps:true})
 
 const User=mongoose.model('User',userSchema);
