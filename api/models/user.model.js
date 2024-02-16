@@ -18,8 +18,15 @@ const userSchema=new mongoose.Schema({
     profilePic:{
         type:String,
         default:"https://freesvg.org/img/abstract-user-flat-4.png",
-    }
-},{timestamps:true})
+    },
+    role: {
+        type: String,
+        enum: ['user', 'writer', 'admin'],
+        default: 'user', 
+      },
+    },
+    { timestamps: true }
+  );
 
 const User=mongoose.model('User',userSchema);
 export default User;
