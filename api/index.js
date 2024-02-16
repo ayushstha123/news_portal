@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import userRoutes from './router/user.route.js'
 import authRoutes from './router/auth.route.js'
+import cookieParser from "cookie-parser";
 dotenv.config();
 const app=express();
 const PORT=3000;
@@ -17,6 +18,7 @@ app.listen(PORT,()=>{
     console.log(`server running on port: ${PORT}`);
 })
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api/user',userRoutes);
 app.use('/api/auth',authRoutes)

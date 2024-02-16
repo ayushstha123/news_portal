@@ -17,7 +17,7 @@ const userSchema=new mongoose.Schema({
     },
     profilePic:{
         type:String,
-        default:"https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png",
+        default:"https://freesvg.org/img/abstract-user-flat-4.png",
     }
 },{timestamps:true})
 
