@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice.js";
+import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signoutSuccess,updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice.js";
 
 const DashProfile = () => {
     const { currentUser } = useSelector(state => state.user);
@@ -13,6 +13,32 @@ const DashProfile = () => {
         setFormData({...formData,[e.target.id]:e.target.value.trim()})
         console.log(formData);
       }
+
+      const handleDeleteAccount = async () => {
+        try {
+          dispatch(deleteUserStart());
+          const res = await fetch(`/api/user/delete/${currentUser._id}`,{
+            method: 'DELETE',
+          });
+          const data = await res.json();
+          if (data.success === false) {
+            dispatch(deleteUserFailure(data));
+            return;
+          }
+          dispatch(deleteUserSuccess(data));
+        } catch (error) {
+          dispatch(deleteUserFailure(error));
+        }
+      };
+    
+      const handleSignOut = async () => {
+        try {
+          await fetch('/api/auth/signout');
+          dispatch(signoutSuccess());
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,8 +77,8 @@ const DashProfile = () => {
                 </div>
             </form>
             <div className='gap-4 flex justify-between p-5'>
-                <span className='p-5 text-red-500'>delete</span>
-                <span className='p-5 text-red-500'>sign out</span>
+                <span onClick={handleDeleteAccount} className='p-5 text-red-500 cursor-pointer'>delete</span>
+                <span onClick={handleSignOut} className='p-5 text-red-500 cursor-pointer'>sign out</span>
             </div>
         </div>
     );
