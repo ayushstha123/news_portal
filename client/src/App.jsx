@@ -7,6 +7,8 @@ import SignUp from './pages/SignUp'
 import Dashboard from './pages/Dashboard'
 import Header from './components/Header'
 import PrivateRoute from './components/PrivateRoute'
+import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute'
+import CreatePost from './pages/CreatePost'
 const App = () => {
   return (
  <BrowserRouter>
@@ -16,6 +18,8 @@ const App = () => {
   <Route path="/about" element={<About/>} />
   <Route path="/signin" element={<SignIn/>} />
   <Route path="/signup" element={<SignUp/>} />
+  <Route element={<OnlyAdminPrivateRoute/>}>
+    <Route path="/create-post" element={<CreatePost/>} /></Route>
 
   <Route element={<PrivateRoute/>}><Route path="/dashboard" element={<Dashboard/>} />
 </Route>

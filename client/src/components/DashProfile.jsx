@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signoutSuccess,updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice.js";
 
 const DashProfile = () => {
-    const { currentUser } = useSelector(state => state.user);
+    const { currentUser ,error,loading} = useSelector(state => state.user);
     const [formData, setFormData] = useState({});
 
     const dispatch = useDispatch();
@@ -64,7 +65,12 @@ const DashProfile = () => {
 
     return (
         <div className="max-w-lg mx-auto p-3 self-center">
-            <h1 className='text-center text-2xl font-bold mb-16'>Profile</h1>
+            <h1 className='text-center text-2xl font-bold mb-16'>
+            {
+                currentUser.role === 'admin' ? 'Admin Profile' : currentUser.role === 'writer' ? 'Writer Profile': 'User Profile'
+                
+            }
+            </h1>
             <form onSubmit={handleSubmit} className='flex flex-col items-center'>
                 <div className='w-32 h-32 cursor-pointer'>
                     <img src={currentUser.profilePic} alt="user" className='rounded-full shadow-lg w-20 h-20 object-cover border-8 border-blue-500' />
@@ -73,8 +79,11 @@ const DashProfile = () => {
                     <input type="text" defaultValue={currentUser.username}  id='username' onChange={handleChange} placeholder='username' />
                     <input type="text" defaultValue={currentUser.email} id='email' onChange={handleChange} placeholder='email' />
                     <input type="text" onChange={handleChange} id='password' placeholder='password' />
-                    <button type='submit' className='bg-green-500 rounded gap-4 w-full text-white'>update</button>
+                    <button type='submit' className='bg-green-500 rounded gap-4 w-full text-white'>{loading ? 'loading...' : 'update'}</button>
                 </div>
+                {(currentUser.role === 'admin' || currentUser.role === 'writer') && (
+        <Link to={'/create-post'} type='button' className='rounded gap-4 w-full text-black'>Create a Post</Link>
+    )}
             </form>
             <div className='gap-4 flex justify-between p-5'>
                 <span onClick={handleDeleteAccount} className='p-5 text-red-500 cursor-pointer'>delete</span>
