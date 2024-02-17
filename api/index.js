@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRoutes from './router/user.route.js'
 import authRoutes from './router/auth.route.js'
 import cookieParser from "cookie-parser";
+import postRoutes from './router/post.route.js';
 dotenv.config();
 const app=express();
 const PORT=3000;
@@ -21,7 +22,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/user',userRoutes);
-app.use('/api/auth',authRoutes)
+app.use('/api/auth',authRoutes);
+app.use('/api/post',postRoutes);
 app.use((err,req,res,next)=>{ //middleware function to handle errors
     const statusCode=err.statusCode || 500;
     const message=err.message || 'internal server error'
