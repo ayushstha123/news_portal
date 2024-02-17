@@ -1,17 +1,15 @@
 import { initializeApp } from 'firebase/app';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: 'mern-blog-b327f.firebaseapp.com',
-  projectId: 'mern-blog-b327f',
-  storageBucket: 'mern-blog-b327f.appspot.com',
-  messagingSenderId: '699397991367',
-  appId: '1:699397991367:web:88ff565ef72a182d6b87e2',
+  authDomain: "newsportal123-80e3b.firebaseapp.com",
+  projectId: "newsportal123-80e3b",
+  storageBucket: "newsportal123-80e3b.appspot.com",
+  messagingSenderId: "690209001939",
+  appId: "1:690209001939:web:410e3f8954c03367fa5f26",
+  measurementId: "G-J5RJJHBMK0"
 };
+
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
