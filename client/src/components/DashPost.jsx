@@ -11,10 +11,11 @@ const DashPost = () => {
         const fetchPosts = async () => {
             try {
                 const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
-                const data = await res.json();
-                if (res.ok) {
-                    setUserPosts(data.posts);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch posts');
                 }
+                const data = await res.json();
+                setUserPosts(data.posts);
             } catch (error) {
                 console.log(error);
             }
@@ -24,6 +25,22 @@ const DashPost = () => {
             fetchPosts();
         }
     }, [currentUser]);
+
+    const handleDeletePost = async (postId) => {
+        try {
+            const res = await fetch(`/api/post/deletepost/${postId}/${currentUser._id}`, {
+                method: 'DELETE',
+            });
+            if (!res.ok) {
+                throw new Error('Failed to delete post');
+            }
+            // Update userPosts state to remove the deleted post
+            setUserPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    };
+    
 
     return (
         <div className='md:w-full table-auto overflow-x-scroll md:mx-auto'>
@@ -37,8 +54,8 @@ const DashPost = () => {
                         <Table.HeadCell>Delete</Table.HeadCell>
                         <Table.HeadCell><span>Edit</span></Table.HeadCell>
                     </Table.Head>
-                        {userPosts.map((post) => (                    
-                        <Table.Body className='divide-y'>
+                    <Table.Body>
+                        {userPosts.map((post) => (
                             <Table.Row key={post._id}>
                                 <Table.Cell>{new Date(post.updatedAt).toLocaleDateString()}</Table.Cell>
                                 <Table.Cell>
@@ -48,13 +65,11 @@ const DashPost = () => {
                                 </Table.Cell>
                                 <Table.Cell className='font-3xl font-bold'>{post.title}</Table.Cell>
                                 <Table.Cell>{post.category}</Table.Cell>
-                                <Table.Cell><span className='font-medium hover:underline text-red-500'>Delete</span></Table.Cell>
+                                <Table.Cell><span className='font-medium hover:underline text-red-500' onClick={() => handleDeletePost(post._id)}>Delete</span></Table.Cell>
                                 <Table.Cell><Link to={`/update-post/${post._id}`} className='text-blue-500'>Edit</Link></Table.Cell>
-                            </Table.Row>                    
-                            </Table.Body>
-
+                            </Table.Row>
                         ))}
-
+                    </Table.Body>
                 </Table>
             ) : (
                 <h1>No posts</h1>
