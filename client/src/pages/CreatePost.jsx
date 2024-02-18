@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useState } from 'react';
 import {app} from '../firebase.js';
+import {useNavigate} from 'react-router-dom'
 
 const CreatePost = () => {
     const [file, setFile] = useState(null);
@@ -11,7 +12,9 @@ const CreatePost = () => {
     const [imageUploadError, setImageUploadError] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [formData, setFormData] = useState({});
-
+const [publishError,setPublishError]=useState(null);
+const navigate=useNavigate();
+console.log(formData)
     const handleUploadImage = async () => {
         try {
             if (!file) {
@@ -54,15 +57,37 @@ const CreatePost = () => {
             setImageUploadError("Image upload failed");
         }
     }
+    const handleSumbit = async (e) => {
+      e.preventDefault();
+      try {
+          const postData = { ...formData, imageUrl: imageUrl }; // Include imageUrl in the form data
+          const res = await fetch('/api/post/create', {
+              method: 'POST',
+              headers: { 'Content-type': 'application/json' },
+              body: JSON.stringify(postData)
+          });
+          const data = await res.json();
+          if (!res.ok) {
+              setPublishError(data.message==500 ?  data.message : "the title must not be same as other title");
+          } else {
+              setPublishError(null);
+              setFormData({});
+              setImageUrl(null);
+              navigate(`/post/${data.slug}`)
 
+          }
+      } catch (error) {
+          setPublishError("Error while publishing");
+      }
+  }
     return (
         <div>
             <div className='p-3 max-w-3xl mx-auto min-h-screen'>
                 <h1 className='text-center text-3xl my-7 font-semibold'>Create A Post</h1>
-                <form className='flex flex-col gap-4'>
+                <form onSubmit={handleSumbit} className='flex flex-col gap-4'>
                     <div className='flex flex-col gap-4 sm:flex-row justify-between'>
-                        <TextInput type='text' placeholder='Title' required id="title" className='flex-1' />
-                        <Select>
+                        <TextInput onChange={(e) => setFormData({ ...formData, title: e.target.value })} type='text' placeholder='Title' id="title" className='flex-1' required/>
+                        <Select onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
                             <option value="uncategorized">Select a category</option>
                             <option value="World">World</option>
                             <option value="tech">Tech</option>
@@ -78,8 +103,13 @@ const CreatePost = () => {
                     {imageUrl && <img src={imageUrl} alt="Uploaded Image" className='w-full h-72 object-cover' />}
 
                     {imageUploadError && (<Alert color="failure">{imageUploadError}</Alert>)}
-                    <ReactQuill theme="snow" placeholder="Write your post here" className='h-72 mb-12' required />
+                    <ReactQuill theme="snow" id='content' placeholder="Write your post here" className='h-72 mb-12' onChange={
+                      (value)=>{
+                        setFormData({...formData,content:value})
+                      }
+                    } required />
                     <Button type='submit' gradientDuoTone='greenToBlue'>Publish</Button>
+                    {publishError && (<Alert color="failure">{publishError}</Alert>)}
                 </form>
             </div>
         </div>
