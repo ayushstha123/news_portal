@@ -19,7 +19,7 @@ const Dashboard = () => {
     <div className="md:w-56 bg-slate-500">      <DashSidebar/>
 </div>
 <div>{tab === 'profile' && <DashProfile/>}</div>
-{tab==='posts' && <DashPost/>
+{tab==='posts' && <DashPost/>}
     </div>
   )
 }
