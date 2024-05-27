@@ -85,7 +85,7 @@ export default function PostPage() {
         dangerouslySetInnerHTML={{ __html: post?.content }}
       ></div>
       <div className="max-w-4xl mx-auto w-full">
-      posted by: {post?.userId?.username || 'Unknown User'}     
+      posted by: {post?.userId.username || 'Unknown User'}     
        </div>
       <CommentSection postId={post._id} />
 

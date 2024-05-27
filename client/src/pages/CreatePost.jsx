@@ -104,11 +104,11 @@ export default function CreatePost() {
           >
             <option value='uncategorized'>Select a category</option>
             <option value='breakingnews'>Breaking News</option>
-            <option value='globaln'>Global</option>
+            <option value='global'>Global</option>
             <option value='world'>World</option>
             <option value='business'>Business</option>
             <option value='sports'>Sports</option>
-            <option value='tech'>Technology</option>
+            <option value='technology'>Technology</option>
             <option value='entertainment'>Entertainment</option>
             <option value='science'>Science</option>
           </Select>

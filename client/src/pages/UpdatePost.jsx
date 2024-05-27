@@ -131,8 +131,13 @@ export default function UpdatePost() {
           >
             <option value='uncategorized'>Select a category</option>
             <option value='breakingnews'>Breaking News</option>
-            <option value='globalnews'>Global News</option>
-            <option value='topnews'>Top News</option>
+            <option value='global'>Global</option>
+            <option value='world'>World</option>
+            <option value='business'>Business</option>
+            <option value='sports'>Sports</option>
+            <option value='technology'>Technology</option>
+            <option value='entertainment'>Entertainment</option>
+            <option value='science'>Science</option>
           </Select>
         </div>
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>

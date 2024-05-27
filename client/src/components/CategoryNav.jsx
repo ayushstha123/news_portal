@@ -1,9 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-const CategoryNav = () => {
+const categories = ['Breaking News', 'Global', 'World', 'Entertainment', 'Technology', 'Health', 'Science', 'Sports'];
+
+const CategoryNav = ({ onCategorySelect }) => {
   return (
-    <div>CategoryNav</div>
-  )
-}
+    <div className='category-nav'>
+      {categories.map((category) => (
+        <button key={category} onClick={() => onCategorySelect(category)}>
+          {category}
+        </button>
+      ))}
+    </div>
+  );
+};
 
-export default CategoryNav
+export default CategoryNav;
