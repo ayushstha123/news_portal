@@ -131,9 +131,14 @@ export default function Search() {
               id='category'
             >
               <option value='uncategorized'>Uncategorized</option>
-            <option value='breakingnews'>Breaking News</option>
-            <option value='globalnews'>Global News</option>
-            <option value='topnews'>Top News</option>
+              <option value='breakingnews'>Breaking News</option>
+            <option value='global'>Global</option>
+            <option value='world'>World</option>
+            <option value='business'>Business</option>
+            <option value='sports'>Sports</option>
+            <option value='technology'>Technology</option>
+            <option value='entertainment'>Entertainment</option>
+            <option value='science'>Science</option>
             </Select>
           </div>
           <Button type='submit' outline gradientDuoTone='purpleToPink'>
