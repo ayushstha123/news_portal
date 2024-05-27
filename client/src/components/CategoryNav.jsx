@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PostCard from './PostCard';  // Make sure this path is correct based on your project structure
 import { Button } from 'flowbite-react';
 
-const categories = ['/', 'breakingnews', 'global', 'world', 'entertainment', 'technology', 'health', 'science', 'sports'];
+const categories = ['breakingnews', 'global', 'world', 'entertainment', 'technology', 'health', 'science', 'sports'];
 
 const CategoryNav = () => {
   const [posts, setPosts] = useState([]);
@@ -53,15 +53,15 @@ const CategoryNav = () => {
 
   return (
     <div className='category-nav'>
-      <Button.Group>
+      <Button.Group className='flex items-center justify-center '>
         {categories.map((category) => (
           <Button
-            className='m-5'
-            color="gray"
+            className='text-black mt-2'
+            color="green"
             key={category}
             onClick={() => handleCategorySelect(category)}
           >
-            {category === '/' ? 'Home' : category}
+            {category}
           </Button>
         ))}
       </Button.Group>
@@ -70,7 +70,7 @@ const CategoryNav = () => {
       ) : (
         <div className='posts'>
           {posts.map((post) => (
-            <div className='inline-block m-5'>
+            <div className='inline-block m-2 '>
             <PostCard key={post._id} post={post} />
             </div>
           ))}

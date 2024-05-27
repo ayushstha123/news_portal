@@ -14,6 +14,21 @@ export default function DashPosts() {
   const isAdmin=currentUser&& currentUser.role==='admin';
   const isJournalist=currentUser&& currentUser.role==='journalist'
   useEffect(() => {
+    const fetchAllPosts = async () => {
+
+      try {
+          const res = await fetch(`/api/post/getposts`);
+
+          if (!res.ok) {
+              throw new Error('Failed to fetch posts');
+          }
+          const data = await res.json();
+          setUserPosts(data.posts);
+      } catch (error) {
+          console.error(error);
+      } 
+  };
+
     const fetchPosts = async () => {
       try {
         const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
@@ -28,7 +43,10 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (isAdmin || isJournalist) {
+    if (isAdmin) {
+      fetchAllPosts();
+  }
+    if (isJournalist) {
       fetchPosts();
     }
   }, [currentUser._id]);
