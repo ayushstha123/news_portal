@@ -11,6 +11,8 @@ export default function DashPosts() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState('');
+  const isAdmin=currentUser&& currentUser.role==='admin';
+  const isJournalist=currentUser&& currentUser.role==='journalist'
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -26,7 +28,7 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (currentUser.role === 'admin') {
+    if (isAdmin || isJournalist) {
       fetchPosts();
     }
   }, [currentUser._id]);
@@ -97,7 +99,7 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.role === 'admin' && userPosts.length > 0 ? (
+      {(isAdmin || isJournalist)  && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -105,6 +107,7 @@ export default function DashPosts() {
               <Table.HeadCell>Post image</Table.HeadCell>
               <Table.HeadCell>Post title</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
+              <Table.HeadCell>Status</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
               <Table.HeadCell>
                 <span>Edit</span>
@@ -139,7 +142,7 @@ export default function DashPosts() {
                       value={post.status}
                       className='bg-gray-200 p-2 rounded-lg text-black'
                       onChange={(e) => handleStatusChange(post._id, e.target.value)}
-                      disabled={currentUser.role === 'business'}
+                      disabled={currentUser.role === 'journalist'}
                     >
                       <option value="pending" >pending</option>
                       <option value="posted">posted</option>

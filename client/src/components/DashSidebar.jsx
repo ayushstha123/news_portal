@@ -17,6 +17,8 @@ export default function DashSidebar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const isAdmin=currentUser&& currentUser.role==='admin';
+  const isJournalist=currentUser&& currentUser.role==='journalist'
   const [tab, setTab] = useState('');
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -44,7 +46,7 @@ export default function DashSidebar() {
     <Sidebar className='w-full md:w-56'>
       <Sidebar.Items>
         <Sidebar.ItemGroup className='flex flex-col gap-1'>
-          {currentUser && currentUser.role==='admin' && (
+          {(isAdmin) && (
             <Link to='/dashboard?tab=dash'>
               <Sidebar.Item
                 active={tab === 'dash' || !tab}
@@ -59,14 +61,14 @@ export default function DashSidebar() {
             <Sidebar.Item
               active={tab === 'profile'}
               icon={HiUser}
-              label={currentUser.role==='admin' ? 'Admin' : 'User'}
+              label={currentUser.role==='admin' ? 'Admin' : currentUser.role==='journalist' ? 'Journalist' : 'User'}
               labelColor='dark'
               as='div'
             >
               Profile
             </Sidebar.Item>
           </Link>
-          {currentUser.role==='admin' && (
+          {(isJournalist || isAdmin) && (
             <Link to='/dashboard?tab=posts'>
               <Sidebar.Item
                 active={tab === 'posts'}

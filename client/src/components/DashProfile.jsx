@@ -49,6 +49,9 @@ export default function DashProfile() {
     }
   }, [imageFile]);
 
+  const isAdmin=currentUser&& currentUser.role==='admin';
+  const isJournalist=currentUser&& currentUser.role==='journalist'
+
   const uploadImage = async () => {
     // service firebase.storage {
     //   match /b/{bucket}/o {
@@ -241,7 +244,7 @@ export default function DashProfile() {
         >
           {loading ? 'Loading...' : 'Update'}
         </Button>
-        {currentUser.role==='admin' && (
+        {(isAdmin || isJournalist) && (
           <Link to={'/create-post'}>
             <Button
               type='button'
