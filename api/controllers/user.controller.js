@@ -54,6 +54,34 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
+export const updateRole = async (req, res, next) => {
+  const isAdmin = req.user && req.user.role === 'admin'; // Check if the user is an admin
+  try {
+    const user = await User.findById(req.params.id); // Assuming userId is passed in the request params
+    if (!user) {
+      return next(errorHandler(401, 'User not found !'));
+      
+    }
+
+    // Check if the authenticated user is neither an admin nor a superadmin
+    if (!isAdmin) {
+      return next(errorHandler(403, 'Only admins or superadmins can update user roles'));
+
+    }
+
+    // Assuming newRole is provided in the request body
+    user.role = req.body.newRole;
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'User role updated successfully', user });
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 export const deleteUser = async (req, res, next) => {
   if (!req.user.role==='admin' && req.user.id !== req.params.userId) {
     return next(errorHandler(403, 'You are not allowed to delete this user'));

@@ -49,7 +49,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar className='border-b-2'>
+    <Navbar className='border-b-2 bg-green-200 dark:bg-green-500'>
       <Link
         to='/'
         className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
@@ -113,9 +113,6 @@ export default function Header() {
         </Navbar.Link>
         <Navbar.Link active={path === '/about'} as={'div'}>
           <Link to='/about'>About</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === '/projects'} as={'div'}>
-          <Link to='/projects'>Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>

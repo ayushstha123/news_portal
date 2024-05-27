@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'flowbite-react';
+import { Modal, Table, Button, Toast } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,11 +26,35 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (currentUser.role==='admin') {
+    if (currentUser.role === 'admin') {
       fetchPosts();
     }
   }, [currentUser._id]);
 
+  const handleStatusChange = async (postId, newStatus) => {
+    try {
+      const res = await fetch(`/api/post/update-status/${postId}/${currentUser._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newStatus }),
+      });
+      if (res.ok) {
+        // Update the userPosts state to reflect the changed status
+        setUserPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === postId ? { ...post, status: newStatus } : post
+          )
+        );
+        console.log(post.status)
+      } else {
+        console.error('Failed to update post status');
+      }
+    } catch (error) {
+      console.error('Error updating post status:', error);
+    }
+  };
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
     try {
@@ -73,7 +97,7 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.role==='admin' && userPosts.length > 0 ? (
+      {currentUser.role === 'admin' && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -110,6 +134,17 @@ export default function DashPosts() {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
+                  <Table.Cell>
+                    <select
+                      value={post.status}
+                      className='bg-gray-200 p-2 rounded-lg text-black'
+                      onChange={(e) => handleStatusChange(post._id, e.target.value)}
+                      disabled={currentUser.role === 'business'}
+                    >
+                      <option value="pending" >pending</option>
+                      <option value="posted">posted</option>
+                      </select>
+                  </Table.Cell>
                   <Table.Cell>
                     <span
                       onClick={() => {

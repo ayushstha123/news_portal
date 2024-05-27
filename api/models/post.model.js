@@ -29,6 +29,11 @@ const postSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    status: {
+      type: String,
+      enum: ['pending', 'posted'],
+      default: 'pending',
+  },
   },
   { timestamps: true }
 );

@@ -10,6 +10,7 @@ export default function DashUsers() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState('');
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -25,10 +26,10 @@ export default function DashUsers() {
         console.log(error.message);
       }
     };
-    if (currentUser.role==='admin') {
+    if (currentUser.role === 'admin') {
       fetchUsers();
     }
-  }, [currentUser._id]);
+  }, [currentUser._id, currentUser.role]);
 
   const handleShowMore = async () => {
     const startIndex = users.length;
@@ -48,24 +49,54 @@ export default function DashUsers() {
 
   const handleDeleteUser = async () => {
     try {
-        const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
-            method: 'DELETE',
-        });
-        const data = await res.json();
-        if (res.ok) {
-            setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
-            setShowModal(false);
-        } else {
-            console.log(data.message);
-        }
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+        setShowModal(false);
+        toast.success('User deleted successfully!');
+      } else {
+        console.log(data.message);
+        toast.error('Failed to delete user.');
+      }
     } catch (error) {
-        console.log(error.message);
+      console.log(error.message);
+      toast.error('Error deleting user.');
+    }
+  };
+
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      const res = await fetch(`/api/user/update-role/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newRole }),
+      });
+      if (res.ok) {
+        // Update the user's role in the state
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === userId ? { ...user, role: newRole } : user
+          )
+        );
+        toast.success('User role updated successfully!');
+      } else {
+        console.error('Failed to update user role');
+        toast.error('Cannot update role');
+      }
+    } catch (error) {
+      console.error('Error updating user role:', error);
+      toast.error(error.message);
     }
   };
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.role==='admin' && users.length > 0 ? (
+      {currentUser.role === 'admin' && users.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -73,6 +104,7 @@ export default function DashUsers() {
               <Table.HeadCell>User image</Table.HeadCell>
               <Table.HeadCell>Username</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
+              <Table.HeadCell>Role</Table.HeadCell>
               <Table.HeadCell>Admin</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
             </Table.Head>
@@ -92,7 +124,18 @@ export default function DashUsers() {
                   <Table.Cell>{user.username}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>
-                    {user.role==='admin' ? (
+                    <select
+                      value={user.role}
+                      className='bg-gray-200 p-2 rounded-lg text-black'
+                      onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                    >
+                      <option value="admin">admin</option>
+                      <option value="journalist">journalist</option>
+                      <option value="user">user</option>
+                    </select>
+                  </Table.Cell>
+                  <Table.Cell>
+                    {user.role === 'admin' ? (
                       <FaCheck className='text-green-500' />
                     ) : (
                       <FaTimes className='text-red-500' />
