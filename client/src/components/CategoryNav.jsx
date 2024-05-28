@@ -56,7 +56,7 @@ const CategoryNav = () => {
       <Button.Group className='flex items-center justify-center '>
         {categories.map((category) => (
           <Button
-            className='text-black mt-2'
+            className='text-black my-5'
             color="green"
             key={category}
             onClick={() => handleCategorySelect(category)}
@@ -70,7 +70,7 @@ const CategoryNav = () => {
       ) : (
         <div className='posts'>
           {posts.map((post) => (
-            <div className='inline-block m-2 '>
+            <div className='inline-block m-1 '>
             <PostCard key={post._id} post={post} />
             </div>
           ))}

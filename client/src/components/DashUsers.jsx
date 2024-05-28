@@ -129,7 +129,7 @@ export default function DashUsers() {
                       className='bg-gray-200 p-2 rounded-lg text-black'
                       onChange={(e) => handleRoleChange(user._id, e.target.value)}
                     >
-                      
+                      {currentUser.role==='admin'? (<option value="admin">admin</option>): <option disabled>admin</option> }
                       <option value="journalist">journalist</option>
                       <option value="user">user</option>
                     </select>
