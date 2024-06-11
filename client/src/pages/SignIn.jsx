@@ -14,14 +14,30 @@ export default function SignIn() {
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
       return dispatch(signInFailure('Please fill all the fields'));
     }
+
+    if (!validateEmail(formData.email)) {
+      return dispatch(signInFailure('Please enter a valid email address'));
+    }
+
+    if (formData.password.length < 5) {
+      return dispatch(signInFailure('Password must be at least 6 characters'));
+    }
+
     try {
       dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
@@ -42,6 +58,7 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
+
   return (
     <div className='min-h-screen mt-20'>
       <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
@@ -50,10 +67,8 @@ export default function SignIn() {
           <Link to='/' className='font-bold dark:text-white text-4xl'>
             News portal
           </Link>
-          
         </div>
         {/* right */}
-
         <div className='flex-1'>
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div>
